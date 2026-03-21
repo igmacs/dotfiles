@@ -14,3 +14,20 @@ replicate the home directory structure in this repository and to sync
 them we can just run `stow -d . -t ~ .`. This will create symlinks at
 the right locations to the files in this repository not explicitly
 excluded in [.stow-local-ignore](.stow-local-ignore).
+
+Other files require more manual steps to be applied and are listed
+below
+
+### Guix
+
+I've started using Guix as a package manager since I was curious about
+it. Right now it coexists with Ubuntu's apt package manager so it only
+manages a few packages, the idea is to migrate them little by little
+and always try to use it as the first option to install a new package
+
+To install the packages managed by Guix, install Guix following the
+documentation and run `guix package -m guix-manifest.scm`
+
+To update the manifest, just run `guix package --export-manifest` and
+merge the output with guix-manifest.scm (if you don't care about
+pinning versions, it's fine to just replace it)
