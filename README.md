@@ -31,3 +31,10 @@ documentation and run `guix package -m guix-manifest.scm`
 To update the manifest, just run `guix package --export-manifest` and
 merge the output with guix-manifest.scm (if you don't care about
 pinning versions, it's fine to just replace it)
+
+### Emacs
+
+Some Emacs files are in the .emacs.d/ folder, but the actual
+configuration is not in the init.el file but in the
+[emacs.org](emacs.org) file which uses Org Babel and needs to be
+tangled manually.

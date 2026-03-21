@@ -1,0 +1,11 @@
+#+PROPERTY: header-args:emacs-lisp :tangle "~/.emacs.d/init.el" :comments link :results silent
+
+* Old config
+  - For a while I will have two sources of Emacs configuration, this
+    one and the one in my private dotfiles repository which I'm
+    reviewing and migrating here. When the migration is complete, I
+    can remove this.
+
+  #+begin_src emacs-lisp
+      (load-file "~/.emacs.d/init-old.el")
+  #+end_src
