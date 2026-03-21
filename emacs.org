@@ -1,5 +1,20 @@
 #+PROPERTY: header-args:emacs-lisp :tangle "~/.emacs.d/init.el" :comments link :results silent
 
+* Early init
+  #+begin_src emacs-lisp
+    ;; Copied from somewhere, it's supposed to speed up the startup,
+    ;; original value is restored later
+    (setq gc-cons-threshold (* 50 1000 1000))
+
+    (add-to-list 'load-path "~/repos/built-from-source/org-mode/lisp")
+    (require 'org-loaddefs)
+
+    (setq use-dialog-box nil)
+  #+end_src
+
+
+
+
 * Old config
   - For a while I will have two sources of Emacs configuration, this
     one and the one in my private dotfiles repository which I'm
@@ -8,4 +23,10 @@
 
   #+begin_src emacs-lisp
       (load-file "~/.emacs.d/init-old.el")
+  #+end_src
+
+
+* Late init
+  #+begin_src emacs-lisp
+    (setq gc-cons-threshold (car (get 'gc-cons-threshold 'standard-value)))
   #+end_src
