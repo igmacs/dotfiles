@@ -85,6 +85,48 @@ package.el
    #+end_src
 
 
+* Key Bindings
+** Useful packages
+*** general
+    - [[https://github.com/noctuid/general.el][noctuid/general.el: More convenient key definitions in emacs]]
+    - Maybe worth exploring, but I only use it for now for
+      buffer-local bindings
+    #+begin_src emacs-lisp
+      (use-package general)
+    #+end_src
+*** hydra
+    - [[https://github.com/abo-abo/hydra][abo-abo/hydra: make Emacs bindings that stick around]]
+    #+begin_src emacs-lisp
+      (use-package hydra)
+    #+end_src
+*** which-key
+    #+begin_src emacs-lisp
+      (require 'which-key) ;; built-in since Emacs 30
+      (diminish 'which-key-mode)
+      (which-key-mode)
+    #+end_src
+** Useful config
+*** Insert key binding representation
+    #+begin_src emacs-lisp
+      (defun ig/key-binding-as-kbd ()
+        "Read keys until RET is pressed, then insert their `key-description'.
+
+      RET terminates input and is not included in the inserted text."
+        (interactive)
+        (let ((evs '())
+              (prompt "Keys (end with RET): ")
+              ev)
+          (while (not (equal ev ?\r))            ; RET
+            (setq ev (read-key prompt)
+                  prompt nil)
+            (unless (equal ev ?\r)
+              (push ev evs)))
+          (insert (key-description (vconcat (nreverse evs))))))
+
+      (global-set-key (kbd "C-c b k") #'ig/key-binding-as-kbd)
+    #+end_src
+
+
 * Old config
   - For a while I will have two sources of Emacs configuration, this
     one and the one in my private dotfiles repository which I'm
