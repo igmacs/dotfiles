@@ -15,6 +15,76 @@
 
 
 
+* Package Management
+** straight.el
+   #+begin_src emacs-lisp
+     (defvar bootstrap-version)
+     (let ((bootstrap-file
+            (expand-file-name
+             "straight/repos/straight.el/bootstrap.el"
+             (or (bound-and-true-p straight-base-dir)
+                 user-emacs-directory)))
+           (bootstrap-version 7))
+       (unless (file-exists-p bootstrap-file)
+         (with-current-buffer
+             (url-retrieve-synchronously
+              "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+              'silent 'inhibit-cookies)
+           (goto-char (point-max))
+           (eval-print-last-sexp)))
+       (load bootstrap-file nil 'nomessage))
+
+     ;; Do not clone some depedencies that are already installed without straight.el
+     (straight-use-package '(org :type built-in))
+
+     (setq straight-use-package-by-default t)
+   #+end_src
+** use-package
+   - Not a package manager, but a macro to simplify and isolate
+     package configuration. Works both with package.el and straight.el
+   - [[https://github.com/jwiegley/use-package][jwiegley/use-package: A use-package declaration for simplifying your .emacs]]
+   - Built-in since Emacs 29 or so
+   #+begin_src emacs-lisp
+     ;; The :diminish option does not work without installing diminish first
+     (use-package diminish)
+
+     ;; (setq use-package-always-ensure t) ;; No longer needed for straight.el
+   #+end_src
+** Emacs Package Manager (package.el)
+
+Kept so we can keep using describe-package, which has no equivalent
+feature in straight.el, and also in case we ever want to go back to
+package.el
+
+   #+begin_src emacs-lisp
+     ;; Initialize package sources
+     (require 'package)
+
+     ;; (setq load-prefer-newer t)
+
+     (setq package-archives
+	   '(("gnu" . "https://elpa.gnu.org/packages/")
+	     ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+	     ("melpa" . "https://melpa.org/packages/")
+	     ("melpa-stable" . "https://stable.melpa.org/packages/")))
+
+     ;; Prefer melpa over melpa-stable
+     (setq package-archive-priorities
+	   '(("melpa" . 10)
+	     ("melpa-stable" . 0)))
+
+     (package-initialize)
+
+     ;; Refresh package contents once if we install something, but only
+     ;; then
+     (defun ig/package-install-refresh-contents (&rest args)
+       (package-refresh-contents)
+       (advice-remove 'package-install 'ig/package-install-refresh-contents))
+
+     (advice-add 'package-install :before 'ig/package-install-refresh-contents)
+   #+end_src
+
+
 * Old config
   - For a while I will have two sources of Emacs configuration, this
     one and the one in my private dotfiles repository which I'm
