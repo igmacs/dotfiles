@@ -127,6 +127,55 @@ package.el
     #+end_src
 
 
+* UI/UX
+** Set up the visible bell and disable the ringing one
+   #+begin_src emacs-lisp
+     ;; Set up the visible bell and disable the ringing one
+     (setq visible-bell t)
+   #+end_src
+** Startup
+   #+begin_src emacs-lisp
+     ;; disable startup page with weird logo and help links
+     (setq inhibit-startup-screen t)
+
+     ;; start maximized
+     (setq initial-frame-alist (quote ((fullscreen . maximized))))
+
+     ;; open scratch buffer initially but in fundamental mode, to not
+     ;; load some packages prematurely and speedup startup
+     (setq initial-major-mode 'fundamental-mode)
+   #+end_src
+** Themes
+After trying out a few, I settled with zenburn and copied this
+configuration from somewhere
+*** zenburn
+    #+begin_src emacs-lisp
+      (use-package zenburn-theme)
+
+      ;; use variable-pitch fonts for some headings and titles
+      (setq zenburn-use-variable-pitch t)
+
+      ;; scale headings in org-mode
+      (setq zenburn-scale-org-headlines t)
+
+      ;; This breaks org-column-view, the following snippet fixes it
+      (eval-after-load 'org
+        '(set-face-attribute 'org-column nil
+                    :height (face-attribute 'default :height)
+                    :family (face-attribute 'default :family)))
+      ;; Source: https://github.com/syl20bnr/spacemacs/issues/14058
+
+      ;; scale headings in outline-mode
+      (setq zenburn-scale-outline-headlines t)
+      (load-theme 'zenburn t)
+    #+end_src
+** General usability
+*** Backup files in a different directory
+    #+begin_src emacs-lisp
+      (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
+    #+end_src
+
+
 * Old config
   - For a while I will have two sources of Emacs configuration, this
     one and the one in my private dotfiles repository which I'm
