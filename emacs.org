@@ -77,11 +77,11 @@ package.el
 
      ;; Refresh package contents once if we install something, but only
      ;; then
-     (defun ig/package-install-refresh-contents (&rest args)
+     (defun my/package-install-refresh-contents (&rest args)
        (package-refresh-contents)
-       (advice-remove 'package-install 'ig/package-install-refresh-contents))
+       (advice-remove 'package-install 'my/package-install-refresh-contents))
 
-     (advice-add 'package-install :before 'ig/package-install-refresh-contents)
+     (advice-add 'package-install :before 'my/package-install-refresh-contents)
    #+end_src
 
 
@@ -108,7 +108,7 @@ package.el
 ** Useful config
 *** Insert key binding representation
     #+begin_src emacs-lisp
-      (defun ig/key-binding-as-kbd ()
+      (defun my/key-binding-as-kbd ()
         "Read keys until RET is pressed, then insert their `key-description'.
 
       RET terminates input and is not included in the inserted text."
@@ -123,7 +123,7 @@ package.el
               (push ev evs)))
           (insert (key-description (vconcat (nreverse evs))))))
 
-      (global-set-key (kbd "C-c b k") #'ig/key-binding-as-kbd)
+      (global-set-key (kbd "C-c b k") #'my/key-binding-as-kbd)
     #+end_src
 
 
@@ -184,6 +184,24 @@ configuration from somewhere
 
   #+begin_src emacs-lisp
       (load-file "~/.emacs.d/init-old.el")
+  #+end_src
+
+
+* Custom config
+
+  Allow to define Emacs configuration directly in your notes, for
+  personal workflows configuration which doesn't really belong here, or
+  configuration that leaks personal information or secrets.
+
+  #+begin_src emacs-lisp
+    (require 'org-roam)
+    (let ((org-config-files
+           (cl-remove-duplicates ;; org-roam aliases make nodes appear more than once
+            (my/org-roam-list-notes-by-tag "init-config"))))
+      (org-map-entries #'org-babel-execute-subtree "+config" org-config-files)
+      (mapcar #'kill-buffer (mapcar #'get-file-buffer org-config-files)))
+
+    (add-to-list 'org-tags-exclude-from-inheritance "init-config")
   #+end_src
 
 
