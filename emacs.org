@@ -176,6 +176,17 @@ configuration from somewhere
     #+end_src
 
 
+* Org Mode
+** UI/UX
+*** Indentation
+Use virtual indentation (org-indent-mode) instead of hard indentation,
+to reduce noise in git diffs when changing a heading level.
+
+#+begin_src emacs-lisp
+(setq org-adapt-indentation nil)
+(setq org-startup-indented t)
+#+end_src
+
 * Old config
   - For a while I will have two sources of Emacs configuration, this
     one and the one in my private dotfiles repository which I'm
