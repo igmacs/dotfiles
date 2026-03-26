@@ -177,14 +177,66 @@ configuration from somewhere
 
 
 * Org Mode
-** UI/UX
-*** Indentation
+
+#+begin_src emacs-lisp
+  ;; I install Org Mode from source to use the latest version, but
+  ;; that was from before I started using straight.el, maybe now I can
+  ;; just use use-package
+  (require 'org)
+#+end_src
+** Basic configuration
+*** UI/UX
+**** Indentation
 Use virtual indentation (org-indent-mode) instead of hard indentation,
 to reduce noise in git diffs when changing a heading level.
 
 #+begin_src emacs-lisp
   (setq org-adapt-indentation nil)
   (setq org-startup-indented t)
+#+end_src
+
+** Built-in features configuration
+*** org-attach
+#+begin_src emacs-lisp
+  (setq org-attach-id-dir (concat org-directory "/data"))
+  (setq org-attach-dir-relative t)
+#+end_src
+** Org related packages
+*** org-anki
+   #+begin_src emacs-lisp
+     (use-package org-anki)
+
+     ;; Only sync headings without children and which have ANKI_DECK set
+     (setq org-anki-skip-function
+           (lambda ()
+             (cond
+              ((org-goto-first-child) (point))
+              ((org-entry-get (point) "ANKI_DECK" t) nil)
+              (t (org-back-to-heading t)
+                 (outline-next-heading)
+                 (point)))))
+   #+end_src
+** Other Improvements
+*** org-sort
+Allow preserving children order when capturing or refiling, using a
+new property ~SORTED~
+#+begin_src emacs-lisp
+  (defun my/org-sort-if-needed ()
+    (cl-flet ((sort-if-needed ()
+                (when-let ((type (org-entry-get (point) "SORTED"))
+                           (key (cdr (assoc type '(("alpha" . ?a)
+                                                   ("prio" . ?p)
+                                                   ("time" . ?t))))))
+
+                  (org-back-to-heading t)
+                  (org-sort-entries nil key))))
+      (save-excursion
+        (sort-if-needed)
+        (org-up-heading-safe)
+        (sort-if-needed))))
+
+  (add-hook 'org-capture-before-finalize-hook #'my/org-sort-if-needed)
+  (add-hook 'org-after-refile-insert-hook #'my/org-sort-if-needed)
 #+end_src
 
 
