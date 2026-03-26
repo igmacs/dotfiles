@@ -1,179 +1,179 @@
 #+PROPERTY: header-args:emacs-lisp :tangle "~/.emacs.d/init.el" :comments link :results silent
 
 * Early init
-  #+begin_src emacs-lisp
-    ;; Copied from somewhere, it's supposed to speed up the startup,
-    ;; original value is restored later
-    (setq gc-cons-threshold (* 50 1000 1000))
+#+begin_src emacs-lisp
+  ;; Copied from somewhere, it's supposed to speed up the startup,
+  ;; original value is restored later
+  (setq gc-cons-threshold (* 50 1000 1000))
 
-    (add-to-list 'load-path "~/repos/built-from-source/org-mode/lisp")
-    (require 'org-loaddefs)
+  (add-to-list 'load-path "~/repos/built-from-source/org-mode/lisp")
+  (require 'org-loaddefs)
 
-    (setq use-dialog-box nil)
-  #+end_src
+  (setq use-dialog-box nil)
+#+end_src
 
 
 
 
 * Package Management
 ** straight.el
-   #+begin_src emacs-lisp
-     (defvar bootstrap-version)
-     (let ((bootstrap-file
-            (expand-file-name
-             "straight/repos/straight.el/bootstrap.el"
-             (or (bound-and-true-p straight-base-dir)
-                 user-emacs-directory)))
-           (bootstrap-version 7))
-       (unless (file-exists-p bootstrap-file)
-         (with-current-buffer
-             (url-retrieve-synchronously
-              "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-              'silent 'inhibit-cookies)
-           (goto-char (point-max))
-           (eval-print-last-sexp)))
-       (load bootstrap-file nil 'nomessage))
+#+begin_src emacs-lisp
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name
+          "straight/repos/straight.el/bootstrap.el"
+          (or (bound-and-true-p straight-base-dir)
+              user-emacs-directory)))
+        (bootstrap-version 7))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
 
-     ;; Do not clone some depedencies that are already installed without straight.el
-     (straight-use-package '(org :type built-in))
+  ;; Do not clone some depedencies that are already installed without straight.el
+  (straight-use-package '(org :type built-in))
 
-     (setq straight-use-package-by-default t)
-   #+end_src
+  (setq straight-use-package-by-default t)
+#+end_src
 ** use-package
-   - Not a package manager, but a macro to simplify and isolate
-     package configuration. Works both with package.el and straight.el
-   - [[https://github.com/jwiegley/use-package][jwiegley/use-package: A use-package declaration for simplifying your .emacs]]
-   - Built-in since Emacs 29 or so
-   #+begin_src emacs-lisp
-     ;; The :diminish option does not work without installing diminish first
-     (use-package diminish)
+- Not a package manager, but a macro to simplify and isolate
+  package configuration. Works both with package.el and straight.el
+- [[https://github.com/jwiegley/use-package][jwiegley/use-package: A use-package declaration for simplifying your .emacs]]
+- Built-in since Emacs 29 or so
+  #+begin_src emacs-lisp
+    ;; The :diminish option does not work without installing diminish first
+    (use-package diminish)
 
-     ;; (setq use-package-always-ensure t) ;; No longer needed for straight.el
-   #+end_src
+    ;; (setq use-package-always-ensure t) ;; No longer needed for straight.el
+  #+end_src
 ** Emacs Package Manager (package.el)
 
 Kept so we can keep using describe-package, which has no equivalent
 feature in straight.el, and also in case we ever want to go back to
 package.el
 
-   #+begin_src emacs-lisp
-     ;; Initialize package sources
-     (require 'package)
+#+begin_src emacs-lisp
+  ;; Initialize package sources
+  (require 'package)
 
-     ;; (setq load-prefer-newer t)
+  ;; (setq load-prefer-newer t)
 
-     (setq package-archives
-	   '(("gnu" . "https://elpa.gnu.org/packages/")
-	     ("nongnu" . "https://elpa.nongnu.org/nongnu/")
-	     ("melpa" . "https://melpa.org/packages/")
-	     ("melpa-stable" . "https://stable.melpa.org/packages/")))
+  (setq package-archives
+        '(("gnu" . "https://elpa.gnu.org/packages/")
+          ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+          ("melpa" . "https://melpa.org/packages/")
+          ("melpa-stable" . "https://stable.melpa.org/packages/")))
 
-     ;; Prefer melpa over melpa-stable
-     (setq package-archive-priorities
-	   '(("melpa" . 10)
-	     ("melpa-stable" . 0)))
+  ;; Prefer melpa over melpa-stable
+  (setq package-archive-priorities
+        '(("melpa" . 10)
+          ("melpa-stable" . 0)))
 
-     (package-initialize)
+  (package-initialize)
 
-     ;; Refresh package contents once if we install something, but only
-     ;; then
-     (defun my/package-install-refresh-contents (&rest args)
-       (package-refresh-contents)
-       (advice-remove 'package-install 'my/package-install-refresh-contents))
+  ;; Refresh package contents once if we install something, but only
+  ;; then
+  (defun my/package-install-refresh-contents (&rest args)
+    (package-refresh-contents)
+    (advice-remove 'package-install 'my/package-install-refresh-contents))
 
-     (advice-add 'package-install :before 'my/package-install-refresh-contents)
-   #+end_src
+  (advice-add 'package-install :before 'my/package-install-refresh-contents)
+#+end_src
 
 
 * Key Bindings
 ** Useful packages
 *** general
-    - [[https://github.com/noctuid/general.el][noctuid/general.el: More convenient key definitions in emacs]]
-    - Maybe worth exploring, but I only use it for now for
-      buffer-local bindings
-    #+begin_src emacs-lisp
-      (use-package general)
-    #+end_src
+- [[https://github.com/noctuid/general.el][noctuid/general.el: More convenient key definitions in emacs]]
+- Maybe worth exploring, but I only use it for now for
+  buffer-local bindings
+  #+begin_src emacs-lisp
+    (use-package general)
+  #+end_src
 *** hydra
-    - [[https://github.com/abo-abo/hydra][abo-abo/hydra: make Emacs bindings that stick around]]
-    #+begin_src emacs-lisp
-      (use-package hydra)
-    #+end_src
+- [[https://github.com/abo-abo/hydra][abo-abo/hydra: make Emacs bindings that stick around]]
+  #+begin_src emacs-lisp
+    (use-package hydra)
+  #+end_src
 *** which-key
-    #+begin_src emacs-lisp
-      (require 'which-key) ;; built-in since Emacs 30
-      (diminish 'which-key-mode)
-      (which-key-mode)
-    #+end_src
+#+begin_src emacs-lisp
+  (require 'which-key) ;; built-in since Emacs 30
+  (diminish 'which-key-mode)
+  (which-key-mode)
+#+end_src
 ** Useful config
 *** Insert key binding representation
-    #+begin_src emacs-lisp
-      (defun my/key-binding-as-kbd ()
-        "Read keys until RET is pressed, then insert their `key-description'.
+#+begin_src emacs-lisp
+  (defun my/key-binding-as-kbd ()
+    "Read keys until RET is pressed, then insert their `key-description'.
 
-      RET terminates input and is not included in the inserted text."
-        (interactive)
-        (let ((evs '())
-              (prompt "Keys (end with RET): ")
-              ev)
-          (while (not (equal ev ?\r))            ; RET
-            (setq ev (read-key prompt)
-                  prompt nil)
-            (unless (equal ev ?\r)
-              (push ev evs)))
-          (insert (key-description (vconcat (nreverse evs))))))
+  RET terminates input and is not included in the inserted text."
+    (interactive)
+    (let ((evs '())
+          (prompt "Keys (end with RET): ")
+          ev)
+      (while (not (equal ev ?\r))            ; RET
+        (setq ev (read-key prompt)
+              prompt nil)
+        (unless (equal ev ?\r)
+          (push ev evs)))
+      (insert (key-description (vconcat (nreverse evs))))))
 
-      (global-set-key (kbd "C-c b k") #'my/key-binding-as-kbd)
-    #+end_src
+  (global-set-key (kbd "C-c b k") #'my/key-binding-as-kbd)
+#+end_src
 
 
 * UI/UX
 ** Set up the visible bell and disable the ringing one
-   #+begin_src emacs-lisp
-     ;; Set up the visible bell and disable the ringing one
-     (setq visible-bell t)
-   #+end_src
+#+begin_src emacs-lisp
+  ;; Set up the visible bell and disable the ringing one
+  (setq visible-bell t)
+#+end_src
 ** Startup
-   #+begin_src emacs-lisp
-     ;; disable startup page with weird logo and help links
-     (setq inhibit-startup-screen t)
+#+begin_src emacs-lisp
+  ;; disable startup page with weird logo and help links
+  (setq inhibit-startup-screen t)
 
-     ;; start maximized
-     (setq initial-frame-alist (quote ((fullscreen . maximized))))
+  ;; start maximized
+  (setq initial-frame-alist (quote ((fullscreen . maximized))))
 
-     ;; open scratch buffer initially but in fundamental mode, to not
-     ;; load some packages prematurely and speedup startup
-     (setq initial-major-mode 'fundamental-mode)
-   #+end_src
+  ;; open scratch buffer initially but in fundamental mode, to not
+  ;; load some packages prematurely and speedup startup
+  (setq initial-major-mode 'fundamental-mode)
+#+end_src
 ** Themes
 After trying out a few, I settled with zenburn and copied this
 configuration from somewhere
 *** zenburn
-    #+begin_src emacs-lisp
-      (use-package zenburn-theme)
+#+begin_src emacs-lisp
+  (use-package zenburn-theme)
 
-      ;; use variable-pitch fonts for some headings and titles
-      (setq zenburn-use-variable-pitch t)
+  ;; use variable-pitch fonts for some headings and titles
+  (setq zenburn-use-variable-pitch t)
 
-      ;; scale headings in org-mode
-      (setq zenburn-scale-org-headlines t)
+  ;; scale headings in org-mode
+  (setq zenburn-scale-org-headlines t)
 
-      ;; This breaks org-column-view, the following snippet fixes it
-      (eval-after-load 'org
-        '(set-face-attribute 'org-column nil
-                    :height (face-attribute 'default :height)
-                    :family (face-attribute 'default :family)))
-      ;; Source: https://github.com/syl20bnr/spacemacs/issues/14058
+  ;; This breaks org-column-view, the following snippet fixes it
+  (eval-after-load 'org
+    '(set-face-attribute 'org-column nil
+                         :height (face-attribute 'default :height)
+                         :family (face-attribute 'default :family)))
+  ;; Source: https://github.com/syl20bnr/spacemacs/issues/14058
 
-      ;; scale headings in outline-mode
-      (setq zenburn-scale-outline-headlines t)
-      (load-theme 'zenburn t)
-    #+end_src
+  ;; scale headings in outline-mode
+  (setq zenburn-scale-outline-headlines t)
+  (load-theme 'zenburn t)
+#+end_src
 ** General usability
 *** Backup files in a different directory
-    #+begin_src emacs-lisp
-      (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
-    #+end_src
+#+begin_src emacs-lisp
+  (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
+#+end_src
 
 
 * Org Mode
@@ -183,9 +183,10 @@ Use virtual indentation (org-indent-mode) instead of hard indentation,
 to reduce noise in git diffs when changing a heading level.
 
 #+begin_src emacs-lisp
-(setq org-adapt-indentation nil)
-(setq org-startup-indented t)
+  (setq org-adapt-indentation nil)
+  (setq org-startup-indented t)
 #+end_src
+
 
 * Old config
   - For a while I will have two sources of Emacs configuration, this
@@ -193,30 +194,30 @@ to reduce noise in git diffs when changing a heading level.
     reviewing and migrating here. When the migration is complete, I
     can remove this.
 
-  #+begin_src emacs-lisp
+    #+begin_src emacs-lisp
       (load-file "~/.emacs.d/init-old.el")
-  #+end_src
+    #+end_src
 
 
 * Custom config
 
-  Allow to define Emacs configuration directly in your notes, for
-  personal workflows configuration which doesn't really belong here, or
-  configuration that leaks personal information or secrets.
+Allow to define Emacs configuration directly in your notes, for
+personal workflows configuration which doesn't really belong here, or
+configuration that leaks personal information or secrets.
 
-  #+begin_src emacs-lisp
-    (require 'org-roam)
-    (let ((org-config-files
-           (cl-remove-duplicates ;; org-roam aliases make nodes appear more than once
-            (my/org-roam-list-notes-by-tag "init-config"))))
-      (org-map-entries #'org-babel-execute-subtree "+config" org-config-files)
-      (mapcar #'kill-buffer (mapcar #'get-file-buffer org-config-files)))
+#+begin_src emacs-lisp
+  (require 'org-roam)
+  (let ((org-config-files
+         (cl-remove-duplicates ;; org-roam aliases make nodes appear more than once
+          (my/org-roam-list-notes-by-tag "init-config"))))
+    (org-map-entries #'org-babel-execute-subtree "+config" org-config-files)
+    (mapcar #'kill-buffer (mapcar #'get-file-buffer org-config-files)))
 
-    (add-to-list 'org-tags-exclude-from-inheritance "init-config")
-  #+end_src
+  (add-to-list 'org-tags-exclude-from-inheritance "init-config")
+#+end_src
 
 
 * Late init
-  #+begin_src emacs-lisp
-    (setq gc-cons-threshold (car (get 'gc-cons-threshold 'standard-value)))
-  #+end_src
+#+begin_src emacs-lisp
+  (setq gc-cons-threshold (car (get 'gc-cons-threshold 'standard-value)))
+#+end_src
