@@ -177,7 +177,6 @@ configuration from somewhere
 
 
 * Org Mode
-
 #+begin_src emacs-lisp
   ;; I install Org Mode from source to use the latest version, but
   ;; that was from before I started using straight.el, maybe now I can
@@ -193,6 +192,67 @@ to reduce noise in git diffs when changing a heading level.
 #+begin_src emacs-lisp
   (setq org-adapt-indentation nil)
   (setq org-startup-indented t)
+#+end_src
+**** Folding and visibility
+
+#+begin_src emacs-lisp
+  ;; Startup visibility
+  (setq org-startup-folded t)
+  (setq org-hide-block-startup t)
+
+  ;; Log into drawers
+  (setq org-log-into-drawer t)
+
+  ;; Protect against invisible edits
+  (setq org-catch-invisible-edits 'show)
+  (setq org-ctrl-k-protect-subtree t)
+#+end_src
+
+**** Special keys
+
+#+begin_src emacs-lisp
+    (setq org-special-ctrl-a/e 'reversed)
+    (setq org-special-ctrl-k t)
+
+    (setq org-use-speed-commands t)
+    (setq org-speed-commands
+          (append '(("Custom")
+                    ("w" . (call-interactively 'org-copy-subtree)) ;; shadows refile speed-key
+                    ("y" . (call-interactively 'org-paste-subtree))
+                    ("r" . org-refile)
+                    ("K" . org-metaup)
+                    ("J" . org-metadown)
+                    ("l" . org-metaright)
+                    ("h" . org-metaleft)
+                    ("L" . org-shiftmetaright)
+                    ("H" . org-shiftmetaleft)
+                    ("\\" progn
+                     (org-mark-subtree)
+                     (call-interactively 'indent-region))
+                    (";" . org-toggle-comment))
+                  org-speed-commands))
+#+end_src
+
+*** Key bindings
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c o") 'org-open-at-point-global)
+#+end_src
+
+*** Priorities
+
+#+begin_src emacs-lisp
+  (setq org-priority-highest 65)
+  (setq org-priority-lowest 69)
+  (setq org-priority-default 67)
+#+end_src
+
+*** Efforts
+
+#+begin_src emacs-lisp
+  (add-to-list 'org-global-properties
+        '("Effort_ALL". "0:02 0:05 0:15 0:30 0:45 1:00 1:30 2:00 3:00 5:00"))
 #+end_src
 
 ** Built-in features configuration
