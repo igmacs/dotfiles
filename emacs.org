@@ -283,12 +283,13 @@ new property ~SORTED~
 #+begin_src emacs-lisp
   (defun my/org-sort-if-needed ()
     (cl-flet ((sort-if-needed ()
-                (when-let ((type (org-entry-get (point) "SORTED"))
+                (when-let* ((type (org-entry-get (point) "SORTED"))
                            (key (cdr (assoc type '(("alpha" . ?a)
                                                    ("prio" . ?p)
                                                    ("time" . ?t))))))
-
                   (org-back-to-heading t)
+                  (org-reveal) ;; Otherwise it doesn't sort the proper level if not visible, see
+                               ;; https://lists.gnu.org/archive/html/emacs-orgmode/2026-04/msg00471.html
                   (org-sort-entries nil key))))
       (save-excursion
         (sort-if-needed)
