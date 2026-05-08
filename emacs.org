@@ -255,6 +255,36 @@ to reduce noise in git diffs when changing a heading level.
         '("Effort_ALL". "0:02 0:05 0:15 0:30 0:45 1:00 1:30 2:00 3:00 5:00"))
 #+end_src
 
+*** Repeated tasks
+#+begin_src emacs-lisp
+
+  ;; I don't want to log by default every time a repeated task is done,
+  ;; but I always want the LAST_REPEAT property. This is the simplest
+  ;; way to achieve that. When org-log-repeat is overriden in a file or
+  ;; a tree, the property will be redundantly set twice, but that's
+  ;; harmless.
+  (setq org-log-repeat nil)
+  (add-hook 'org-todo-repeat-hook
+            (lambda ()
+              ;; Same code as the one used in `org-auto-repeat-maybe'
+              (org-entry-put nil "LAST_REPEAT" (format-time-string
+        				              (org-time-stamp-format t t)
+                                                (org-current-effective-time)))))
+
+  ;; I don't like TODO changes logs and clocking time to be in the
+  ;; same drawer, but I don't want to have always a different name for
+  ;; one of those drawers just for the few times that happens. The
+  ;; logs drawer name can be overriden for a specific tree with the
+  ;; property LOG_INTO_DRAWER, so that's what I do instead. But then I
+  ;; need to set this variable, otherwise that overriden drawer would
+  ;; be also used for clocking time.
+  (setq org-clock-into-drawer "LOGBOOK")
+
+
+  (add-hook 'org-todo-repeat-hook #'org-reset-checkbox-state-subtree)
+
+#+end_src
+
 ** Built-in features configuration
 *** org-attach
 #+begin_src emacs-lisp
