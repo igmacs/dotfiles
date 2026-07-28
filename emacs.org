@@ -331,6 +331,17 @@ new property ~SORTED~
 #+end_src
 
 
+* Emacs as an IDE
+** eglot
+#+begin_src emacs-lisp
+  (use-package eglot ;; Already built-in in latest Emacs versions, but we want latest version
+    :defer t
+    :config
+    (setq eglot-autoshutdown t
+          eglot-extend-to-xref t))
+#+end_src
+
+
 * Old config
   - For a while I will have two sources of Emacs configuration, this
     one and the one in my private dotfiles repository which I'm
