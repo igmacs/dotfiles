@@ -240,7 +240,8 @@ to reduce noise in git diffs when changing a heading level.
   (global-set-key (kbd "C-c o") 'org-open-at-point-global)
 #+end_src
 
-*** Priorities
+*** TODOs
+**** Priorities
 
 #+begin_src emacs-lisp
   (setq org-priority-highest 65)
@@ -248,14 +249,14 @@ to reduce noise in git diffs when changing a heading level.
   (setq org-priority-default 67)
 #+end_src
 
-*** Efforts
+**** Efforts
 
 #+begin_src emacs-lisp
   (add-to-list 'org-global-properties
         '("Effort_ALL". "0:02 0:05 0:15 0:30 0:45 1:00 1:30 2:00 3:00 5:00"))
 #+end_src
 
-*** Repeated tasks
+**** Repeated tasks
 #+begin_src emacs-lisp
 
   ;; I don't want to log by default every time a repeated task is done,
@@ -285,6 +286,10 @@ to reduce noise in git diffs when changing a heading level.
 
 #+end_src
 
+**** Blocking
+#+begin_src emacs-lisp
+  (setq org-enforce-todo-checkbox-dependencies t)
+#+end_src
 ** Built-in features configuration
 *** org-attach
 #+begin_src emacs-lisp
