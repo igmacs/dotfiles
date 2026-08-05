@@ -347,6 +347,17 @@ new property ~SORTED~
 #+end_src
 ** Programming Languages
 *** Python
+**** Autoimport
+#+begin_src emacs-lisp
+  (with-eval-after-load 'eglot
+    (setq-default eglot-workspace-configuration
+                  (plist-put eglot-workspace-configuration :pylsp
+                             '(:plugins
+                               (:rope_autoimport (:enabled t))))))
+
+  ;; There is a bug though:
+  ;; https://github.com/python-lsp/python-lsp-server/issues/721
+#+end_src
 **** Handle virtual environments
 #+begin_src emacs-lisp
   (use-package envrc) ;; requires direnv to be installed

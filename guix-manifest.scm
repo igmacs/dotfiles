@@ -19,6 +19,7 @@
        "pkg-config" ;; needed by bluez, or at least bluer, it's Rust interface
        "pup" ;; HTML command line parser
        "python-lsp-server"
+       "python-rope"
        "qutebrowser"
        "rbw" ;; Bitwarden client
        "ripgrep"
