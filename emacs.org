@@ -345,6 +345,13 @@ new property ~SORTED~
     (setq eglot-autoshutdown t
           eglot-extend-to-xref t))
 #+end_src
+** Programming Languages
+*** Python
+**** Handle virtual environments
+#+begin_src emacs-lisp
+  (use-package envrc) ;; requires direnv to be installed
+  (envrc-global-mode)
+#+end_src
 
 
 * Old config
