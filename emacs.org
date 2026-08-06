@@ -345,6 +345,12 @@ new property ~SORTED~
     (setq eglot-autoshutdown t
           eglot-extend-to-xref t))
 #+end_src
+** flycheck
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :init (global-flycheck-mode)
+    :config (setq-default flycheck-global-modes '(not org-mode)))
+#+end_src
 ** Programming Languages
 *** Python
 **** Autoimport
@@ -360,7 +366,8 @@ new property ~SORTED~
 #+end_src
 **** Handle virtual environments
 #+begin_src emacs-lisp
-  (use-package envrc) ;; requires direnv to be installed
+  (use-package envrc ;; requires direnv to be installed
+    :diminish)
   (envrc-global-mode)
 #+end_src
 
