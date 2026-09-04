@@ -1,6 +1,13 @@
 #+PROPERTY: header-args:emacs-lisp :tangle "~/.emacs.d/init.el" :comments link :results silent
 
 * Early init
+
+** Lexical binding cookie
+#+begin_src emacs-lisp :comments no
+  ;; -*- lexical-binding: t; -*-
+#+end_src
+
+** Other
 #+begin_src emacs-lisp
   ;; Copied from somewhere, it's supposed to speed up the startup,
   ;; original value is restored later
@@ -11,8 +18,6 @@
 
   (setq use-dialog-box nil)
 #+end_src
-
-
 
 
 * Package Management
