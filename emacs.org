@@ -316,6 +316,11 @@ to reduce noise in git diffs when changing a heading level.
                  (outline-next-heading)
                  (point)))))
    #+end_src
+*** org-ql
+#+begin_src emacs-lisp
+  (straight-use-package
+  '(org-ql :fork "igmacs/org-ql"))
+#+end_src
 ** Other Improvements
 *** org-sort
 Allow preserving children order when capturing or refiling, using a
