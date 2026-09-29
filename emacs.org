@@ -382,6 +382,14 @@ new property ~SORTED~
 #+end_src
 
 
+* Emacs as an OS
+** Shells & Terminal Emulators
+*** vterm
+#+begin_src emacs-lisp
+  (use-package vterm)
+#+end_src
+
+
 * Old config
   - For a while I will have two sources of Emacs configuration, this
     one and the one in my private dotfiles repository which I'm

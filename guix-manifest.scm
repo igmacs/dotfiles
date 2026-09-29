@@ -14,6 +14,7 @@
        "dbus" ;; Needed by bluez
        "direnv" ;; Used by Emacs's envrc package, to easily manage Python environments
        "libreoffice"
+       "libtool" ;; Needed for Emacs' vterm
        "mpv" ;; Audio and video player
        "nss-certs" ;; needed for curl to work
        "pkg-config" ;; needed by bluez, or at least bluer, it's Rust interface
