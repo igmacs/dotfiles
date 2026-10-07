@@ -24,9 +24,11 @@
        "qutebrowser"
        "rbw" ;; Bitwarden client
        "ripgrep"
+       "ruff"
        "rust"
        "sqlite"
        "syncthing"
        "tidy-html" ;; I use it for pretty-printing HTML in the command line
+       "tree-sitter"
        "typst"
        "vim"))
