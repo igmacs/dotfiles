@@ -1,1 +1,158 @@
+./venv/bin/activate
+COUNTER=$(printf  %06d `git rev-list --count HEAD`)
+apt list | fzf
+apt list | grep PACKAGE
+apt search PACKAGE
+az account list --output table
+az account set --name "NAME"
+az account set --subscription ID
+az account show
+az aks list -o table
+az keyvault secret set --name NAME --vault-name VAULT_NAME --value VALUE
+az keyvault secret show --name NAME --vault-name VAULT_NAME
+az login
+capsctrl
 cat FILE
+cd
+cd ..
+cd DIR
+chmod +x FILE
+clear
+cp -r DIR DIR
+curl -s -X POST ENDPOINT -H "Content-Type: application/json" -d @- <<EOF MULTILINE_STRING EOF
+date +%s
+date -d@EPOCH
+docker images
+docker login ghcr.io -u $GITHUB_USER -p $GITHUB_TOKEN
+docker logs -f IDPREFIX
+docker logs IDPREFIX -f --since=1m
+docker ps
+docker ps -a
+docker pull IMAGE
+docker rm -f $(docker ps -a -q --filter "name=NAME")
+docker rm -f IDPREFIX
+docker start IDPREFIX
+docker stop IDPREFIX
+du -sh -- * # Size of files in current directory
+echo $?
+echo $VAR
+echo SOMETHING
+emacs -Q
+emacs -Q -l ~/.emacs.d/straight/repos/straight.el/bootstrap.el
+env | grep SUBWORD
+export PATH=$PATH:/my-path
+faketime -f '+1d' emacs
+flux get all -A
+flux get helmrelease --all-namespaces
+flux get helmrelease RELEASE -n NAMESPACE
+flux resume helmrelease RELEASE -n NAMESPACE
+flux suspend helmrelease RELEASE -n NAMESPACE
+git checkout -b BRANCH UPSTREAM/BRANCH
+git clean -fdx
+git clean -ndx
+git clone --branch BRANCH --depth 1 REPO
+git clone --recurse-submodules REPO
+git clone REPO
+git config --global user.email "EMAIL"
+git config --global user.name "NAME"
+git config user.email EMAIL
+git config user.name NAME
+git format-patch REF1..REF2
+git ls-remote REPO
+git remote add upstream UPSTREAM
+git rev-list --all
+git rev-list --count HEAD
+git rev-parse --short main
+git submodule add SUBMODULE
+git submodule update --init --recursive
+guix install PACKAGE
+guix package --dry-run -u
+guix package --export-manifest
+guix package --list-generations=30d
+guix package -u
+guix pull
+guix search PACKAGE
+helm get all -A
+helm get release RELEASE
+helm get values RELEASE -n NAMESPACE
+helm history RELEASE --all-namespaces
+helm inspect chart oci://ghcr.io/CHART --version VERSION
+helm lint charts/evp/
+helm list --all-namespaces
+helm pull oci://ghcr.io/CHART --version VERSION
+helm registry login ghcr.io -u $GITHUB_USER -p $GITHUB_TOKEN
+helm template oci://ghcr.io/CHART --version VERSION
+helm upgrade --install -n NAMESPACE RELEASE oci://CHART --version VERSION --values values.yaml
+history | fzf
+kubectl config get-contexts
+kubectl config set-context --current --namespace=NAMESPACE
+kubectl config use-context CONTEXT
+kubectl create -n NAMESPACE -f FILE.yaml
+kubectl delete TYPE RESOURCE -n NAMESPACE
+kubectl describe TYPE RESOURCE -n NAMESPACE
+kubectl describe TYPE RESOURCE -n NAMESPACE --context CONTEXT
+kubectl describe TYPE RESOURCE -n NAMESPACE -o json
+kubectl describe TYPE RESOURCE -n NAMESPACE -o yaml
+kubectl describe TYPEs -n NAMESPACE
+kubectl describe all -n NAMESPACE
+kubectl edit TYPE RESOURCE -n NAMESPACE
+kubectl exec -ti POD -- bash
+kubectl exec -ti evp-kafka-0 -- bash -c 'COMMAND'
+kubectl get TYPE -n NAMESPACE
+kubectl get all -n NAMESPACE
+kubectl get event --sort-by .lastTimestamp -n NAMESPACE
+kubectl get pods
+kubectl logs -f POD --since=5m -n NAMESPACE
+kubectl logs POD -c INIT_CONTAINER
+kubectl port-forward POD 8080
+kubectl rollout restart deployment DEPLOYMENT
+kubectl rollout restart statefulset STATEFULSET
+kubectl scale deployment DEPLOYMENT --replicas N
+ln -s ORIG LINK            # symbolic link
+ls
+ls DIR
+mv FILE FILE
+normalcaps
+open .
+pass PASSWORD
+pass edit PASSWORD
+pass insert PASSWORD
+pass show PASSWORD
+pgrep PROGRAM
+pkill PROGRAM
+pre-commit run --all-files --config CONFIG_FILE --to-ref REF_DEFAULT_HEAD --from-ref REF
+psql "host=HOST port=5432 dbname=DB_NAME user=DB_USER password=DB_PASSWORD"
+python -m venv ./venv
+python FILE
+read -s -p "Base64: " secret; echo "$secret" | base64 -d; echo
+read -s -p "HTML: " html; echo "$html" | tidy -q -i -wrap 0 --show-body-only auto
+read -s -p "JSON: " json; echo "$json" | jq
+rm -rf DIR
+rm FILE
+rmdir DIR
+sqlcmd -S "DB_ENDPOINT",1433 -d "DB_NAME" -U "DB_USER" -P "DB_PASSWORD" -Q "QUERY"
+sqlite3 DATABASE.DB
+stat FILE
+stow -d . -t ~ .
+stow -d . -t ~ .
+sudo apt autoremove
+sudo apt install PACKAGE
+sudo apt remove --purge PACKAGE
+sudo apt search PACKAGE
+sudo apt update
+sudo apt upgrade
+sudo update-alternatives --config java
+sudo wifi-password --show-qr
+tar -xvzf FILE.TAR.GZ
+thefuck
+top
+touch FILE
+uname -a        # Hardware info
+unzip ZIPFILE -d TARGET_DIR
+unzip ZIPFILE
+urlwatch
+uv run FILE
+uv self update
+wc -l FILE      # Count lines
+which EXECUTABLE
+yq eval 'PATH' YAML_FILE
