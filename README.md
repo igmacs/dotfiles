@@ -38,3 +38,10 @@ Some Emacs files are in the .emacs.d/ folder, but the actual
 configuration is not in the init.el file but in the
 [emacs.org](emacs.org) file which uses Org Babel and needs to be
 tangled manually.
+
+
+### Gnome
+
+To setup your GNOME configuration on a new machine, run
+`gnome/gsettings.sh`, and load each `gnome/x/y/z.ini` file with `dconf
+load /org/gnome/x/y/z/ < gnome/x/y/z.ini`
