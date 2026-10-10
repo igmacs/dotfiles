@@ -1,0 +1,23 @@
+[user]
+	name = Ignacio Casso
+	email = ignacio.casso@mailbox.org
+[core]
+	excludesFile = /home/ignacio/.config/git/.gitignore
+[alias]
+	st = status -sb
+        who = shortlog -sn --no-merges HEAD
+        changes = !git log --format=format: --name-only --since='1 year ago' | sort | uniq -c | sort -nr | head -20
+[init]
+	defaultBranch = main
+[help]
+	autocorrect = prompt
+[fetch]
+	prune = true
+[pull]
+	rebase = true
+[log]
+	date = iso
+[branch]
+	sort = -committerdate
+[includeIf "gitdir:~/repos/work/"]
+        path = "~/.config/git/work/.gitconfig"
