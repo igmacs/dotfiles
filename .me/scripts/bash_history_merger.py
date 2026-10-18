@@ -42,6 +42,10 @@ with open(HISTORY) as f:
     new = f.readlines()
 
 def equivalent(tree1, tree2):
+
+    if tree1.type == "word" and tree2.type == "string" and (text := tree1.text.decode()) == text.upper():
+        return True
+
     if tree1.type != tree2.type:
         return False
 
@@ -67,7 +71,7 @@ def equivalent(tree1, tree2):
 useful_parsed = [parser.parse(bytes(line.split("#")[0], "utf8")) for line in useful]
 
 for line in new:
-    parsed = parser.parse(bytes(line, "utf8"))
+    parsed = parser.parse(bytes(line.split("#")[0], "utf8"))
     for u in useful_parsed:
         if equivalent(u.root_node, parsed.root_node):
             break

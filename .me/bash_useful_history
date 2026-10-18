@@ -19,9 +19,11 @@ cd DIR
 chmod +x FILE
 clear
 cp -r DIR DIR
+cp FILE FILE
 curl -s -X POST ENDPOINT -H "Content-Type: application/json" -d @- <<EOF MULTILINE_STRING EOF
 date +%s
 date -d@EPOCH
+date -u +%Y-%m-%dT%H:%M:%S%Z
 docker images
 docker login ghcr.io -u $GITHUB_USER -p $GITHUB_TOKEN
 docker logs -f IDPREFIX
@@ -58,13 +60,18 @@ git config --global user.name "NAME"
 git config user.email EMAIL
 git config user.name NAME
 git format-patch REF1..REF2
+git init
 git ls-remote REPO
 git remote add upstream UPSTREAM
 git rev-list --all
 git rev-list --count HEAD
 git rev-parse --short main
+git status
 git submodule add SUBMODULE
 git submodule update --init --recursive
+gpg --encrypt FILE
+gpg --output FILE --decrypt FILE
+gpg --symetric FILE
 guix install PACKAGE
 guix package --dry-run -u
 guix package --export-manifest
@@ -111,6 +118,7 @@ kubectl scale deployment DEPLOYMENT --replicas N
 ln -s ORIG LINK            # symbolic link
 ls
 ls DIR
+mkdir DIR
 mv FILE FILE
 normalcaps
 open .
@@ -137,6 +145,7 @@ stow -d . -t ~ .
 stow -d . -t ~ .
 sudo apt autoremove
 sudo apt install PACKAGE
+sudo apt install PATH.deb
 sudo apt remove --purge PACKAGE
 sudo apt search PACKAGE
 sudo apt update
@@ -148,8 +157,8 @@ thefuck
 top
 touch FILE
 uname -a        # Hardware info
-unzip ZIPFILE -d TARGET_DIR
 unzip ZIPFILE
+unzip ZIPFILE -d TARGET_DIR
 urlwatch
 uv run FILE
 uv self update
