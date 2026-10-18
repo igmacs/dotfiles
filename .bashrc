@@ -119,8 +119,6 @@ fi
 
 ## MY ACTUAL CONFIG
 
-export PATH=$PATH:~/.local/bin
-
 # Bash history
 HISTCONTROL=ignoreboth:erasedups
 HISTSIZE=-1
