@@ -1,4 +1,4 @@
-./venv/bin/activate
+. ./venv/bin/activate
 COUNTER=$(printf  %06d `git rev-list --count HEAD`)
 apt list | fzf
 apt list | grep PACKAGE
@@ -24,6 +24,8 @@ curl -s -X POST ENDPOINT -H "Content-Type: application/json" -d @- <<EOF MULTILI
 date +%s
 date -d@EPOCH
 date -u +%Y-%m-%dT%H:%M:%S%Z
+docker build -t IMAGE .
+docker container prune
 docker images
 docker login ghcr.io -u $GITHUB_USER -p $GITHUB_TOKEN
 docker logs -f IDPREFIX
@@ -31,8 +33,14 @@ docker logs IDPREFIX -f --since=1m
 docker ps
 docker ps -a
 docker pull IMAGE
+docker rm $(docker ps -a -q -f status=exited)
 docker rm -f $(docker ps -a -q --filter "name=NAME")
 docker rm -f IDPREFIX
+docker rmi IMAGE
+docker COMMAND --help
+docker run IMAGE
+docker run -it IMAGE sh
+docker search IMAGE
 docker start IDPREFIX
 docker stop IDPREFIX
 du -sh -- * # Size of files in current directory
@@ -55,6 +63,7 @@ git clean -ndx
 git clone --branch BRANCH --depth 1 REPO
 git clone --recurse-submodules REPO
 git clone REPO
+git commit --amend --author=AUTHOR_AND_EMAIL --no-edit
 git config --global user.email "EMAIL"
 git config --global user.name "NAME"
 git config user.email EMAIL
@@ -77,6 +86,7 @@ guix package --dry-run -u
 guix package --export-manifest
 guix package --list-generations=30d
 guix package -u
+guix package -u PACKAGE
 guix pull
 guix search PACKAGE
 helm get all -A
@@ -91,6 +101,8 @@ helm registry login ghcr.io -u $GITHUB_USER -p $GITHUB_TOKEN
 helm template oci://ghcr.io/CHART --version VERSION
 helm upgrade --install -n NAMESPACE RELEASE oci://CHART --version VERSION --values values.yaml
 history | fzf
+jupyter kernel --kernel KERNEL --KernelManager.connection_file=PATH_TO_JSON
+jupyter notebook
 kubectl config get-contexts
 kubectl config set-context --current --namespace=NAMESPACE
 kubectl config use-context CONTEXT
@@ -118,6 +130,7 @@ kubectl scale deployment DEPLOYMENT --replicas N
 ln -s ORIG LINK            # symbolic link
 ls
 ls DIR
+man COMMAND
 mkdir DIR
 mv FILE FILE
 normalcaps
@@ -127,6 +140,8 @@ pass edit PASSWORD
 pass insert PASSWORD
 pass show PASSWORD
 pgrep PROGRAM
+pip install PACKAGE
+pipx install APPLICATION
 pkill PROGRAM
 pre-commit run --all-files --config CONFIG_FILE --to-ref REF_DEFAULT_HEAD --from-ref REF
 psql "host=HOST port=5432 dbname=DB_NAME user=DB_USER password=DB_PASSWORD"
@@ -156,6 +171,7 @@ tar -xvzf FILE.TAR.GZ
 thefuck
 top
 touch FILE
+tree -L N    # Folder/directory hierarchy
 uname -a        # Hardware info
 unzip ZIPFILE
 unzip ZIPFILE -d TARGET_DIR
@@ -163,5 +179,7 @@ urlwatch
 uv run FILE
 uv self update
 wc -l FILE      # Count lines
+which -a EXECUTABLE    # All paths, not only first one
 which EXECUTABLE
+xournal FILE
 yq eval 'PATH' YAML_FILE
