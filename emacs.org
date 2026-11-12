@@ -347,6 +347,49 @@ new property ~SORTED~
 
 
 * Emacs as an IDE
+** Project Managament & Version Control
+** Version Control
+*** magit
+#+begin_src emacs-lisp
+  (use-package magit
+    :defer t
+    :config
+    (setq magit-log-margin-show-committer-date t))
+
+  (advice-add 'magit-diff-visit-file :after
+              (lambda (&rest args)
+                (when (eq major-mode 'org-mode)
+                  (org-reveal))))
+
+  (add-hook 'ediff-prepare-buffer-hook #'show-all)
+#+end_src
+**** forge
+#+begin_src emacs-lisp
+  (use-package forge
+    :after magit)
+#+end_src
+*** Browse url for file and line at point in GitHub (and viceversa)
+#+begin_src emacs-lisp
+  ;; TODO: Use browse-at-remote or git-link instead
+  (defun my/forge-browse-url-at-point ()
+    (interactive)
+    (browse-url
+     (concat (forge-get-url (forge-get-repository :stub))
+             "/blob/"
+             (let
+                 ((commit-sha (shell-command-to-string "git rev-parse HEAD")))
+               (if
+                   (string-empty-p
+                    (shell-command-to-string (concat "git branch -r --contains " commit-sha)))
+                   (shell-command-to-string (concat "git rev-parse --short $(git symbolic-ref refs/remotes/origin/HEAD --short)"))
+                 commit-sha))
+
+             "/"
+             (magit-file-relative-name buffer-file-name)
+             "#L"
+             (number-to-string (line-number-at-pos)))))
+#+end_src
+
 ** eglot
 #+begin_src emacs-lisp
   (use-package eglot ;; Already built-in in latest Emacs versions, but we want latest version
