@@ -216,26 +216,26 @@ to reduce noise in git diffs when changing a heading level.
 **** Special keys
 
 #+begin_src emacs-lisp
-    (setq org-special-ctrl-a/e 'reversed)
-    (setq org-special-ctrl-k t)
+  (setq org-special-ctrl-a/e 'reversed)
+  (setq org-special-ctrl-k t)
 
-    (setq org-use-speed-commands t)
-    (setq org-speed-commands
-          (append '(("Custom")
-                    ("w" . (call-interactively 'org-copy-subtree)) ;; shadows refile speed-key
-                    ("y" . (call-interactively 'org-paste-subtree))
-                    ("r" . org-refile)
-                    ("K" . org-metaup)
-                    ("J" . org-metadown)
-                    ("l" . org-metaright)
-                    ("h" . org-metaleft)
-                    ("L" . org-shiftmetaright)
-                    ("H" . org-shiftmetaleft)
-                    ("\\" progn
-                     (org-mark-subtree)
-                     (call-interactively 'indent-region))
-                    (";" . org-toggle-comment))
-                  org-speed-commands))
+  (setq org-use-speed-commands t)
+  (setq org-speed-commands
+        (append '(("Custom")
+                  ("w" . (call-interactively 'org-copy-subtree)) ;; shadows refile speed-key
+                  ("y" . (call-interactively 'org-paste-subtree))
+                  ("r" . org-refile)
+                  ("K" . org-metaup)
+                  ("J" . org-metadown)
+                  ("l" . org-metaright)
+                  ("h" . org-metaleft)
+                  ("L" . org-shiftmetaright)
+                  ("H" . org-shiftmetaleft)
+                  ("\\" progn
+                   (org-mark-subtree)
+                   (call-interactively 'indent-region))
+                  (";" . org-toggle-comment))
+                org-speed-commands))
 #+end_src
 
 *** Key bindings
@@ -258,7 +258,7 @@ to reduce noise in git diffs when changing a heading level.
 
 #+begin_src emacs-lisp
   (add-to-list 'org-global-properties
-        '("Effort_ALL". "0:02 0:05 0:15 0:30 0:45 1:00 1:30 2:00 3:00 5:00"))
+               '("Effort_ALL". "0:02 0:05 0:15 0:30 0:45 1:00 1:30 2:00 3:00 5:00"))
 #+end_src
 
 **** Repeated tasks
@@ -303,23 +303,23 @@ to reduce noise in git diffs when changing a heading level.
 #+end_src
 ** Org related packages
 *** org-anki
-   #+begin_src emacs-lisp
-     (use-package org-anki)
+#+begin_src emacs-lisp
+  (use-package org-anki)
 
-     ;; Only sync headings without children and which have ANKI_DECK set
-     (setq org-anki-skip-function
-           (lambda ()
-             (cond
-              ((org-goto-first-child) (point))
-              ((org-entry-get (point) "ANKI_DECK" t) nil)
-              (t (org-back-to-heading t)
-                 (outline-next-heading)
-                 (point)))))
-   #+end_src
+  ;; Only sync headings without children and which have ANKI_DECK set
+  (setq org-anki-skip-function
+        (lambda ()
+          (cond
+           ((org-goto-first-child) (point))
+           ((org-entry-get (point) "ANKI_DECK" t) nil)
+           (t (org-back-to-heading t)
+              (outline-next-heading)
+              (point)))))
+#+end_src
 *** org-ql
 #+begin_src emacs-lisp
   (straight-use-package
-  '(org-ql :fork "igmacs/org-ql"))
+   '(org-ql :fork "igmacs/org-ql"))
 #+end_src
 ** Other Improvements
 *** org-sort
@@ -329,12 +329,12 @@ new property ~SORTED~
   (defun my/org-sort-if-needed ()
     (cl-flet ((sort-if-needed ()
                 (when-let* ((type (org-entry-get (point) "SORTED"))
-                           (key (cdr (assoc type '(("alpha" . ?a)
-                                                   ("prio" . ?p)
-                                                   ("time" . ?t))))))
+                            (key (cdr (assoc type '(("alpha" . ?a)
+                                                    ("prio" . ?p)
+                                                    ("time" . ?t))))))
                   (org-back-to-heading t)
                   (org-reveal) ;; Otherwise it doesn't sort the proper level if not visible, see
-                               ;; https://lists.gnu.org/archive/html/emacs-orgmode/2026-04/msg00471.html
+                  ;; https://lists.gnu.org/archive/html/emacs-orgmode/2026-04/msg00471.html
                   (org-sort-entries nil key))))
       (save-excursion
         (sort-if-needed)
@@ -391,14 +391,14 @@ new property ~SORTED~
 
 
 * Old config
-  - For a while I will have two sources of Emacs configuration, this
-    one and the one in my private dotfiles repository which I'm
-    reviewing and migrating here. When the migration is complete, I
-    can remove this.
+- For a while I will have two sources of Emacs configuration, this
+  one and the one in my private dotfiles repository which I'm
+  reviewing and migrating here. When the migration is complete, I
+  can remove this.
 
-    #+begin_src emacs-lisp
-      (load-file "~/.emacs.d/init-old.el")
-    #+end_src
+  #+begin_src emacs-lisp
+    (load-file "~/.emacs.d/init-old.el")
+  #+end_src
 
 
 * Custom config
