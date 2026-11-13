@@ -354,10 +354,14 @@ new property ~SORTED~
   ;; Enable Vertico.
   (use-package vertico
     :bind (:map vertico-map
+                ("DEL" . vertico-directory-delete-char)
+                ("M-DEL" . vertico-directory-delete-word)
                 ;; ivy backward compatibility
-                ("C-m" . exit-minibuffer)
+                ("C-m" . vertico-directory-enter)
                 ("M-i" . vertico-insert)
                 ("C-M-j" . vertico-exit-input))
+    :custom-face
+    (vertico-current ((t (:inherit highlight :extend nil))))
     :init
     (vertico-mode))
 #+end_src
@@ -375,7 +379,6 @@ new property ~SORTED~
 **** Prescient
 #+begin_src emacs-lisp
   (use-package vertico-prescient
-    :after ivy
     :config
     (vertico-prescient-mode 1)
     (prescient-persist-mode 1))
@@ -426,7 +429,11 @@ new property ~SORTED~
 
   (global-set-key (kbd "C-s") 'consult-line)
 
+  (global-set-key (kbd "C-x b") 'consult-buffer)
+  (recentf-mode 1)
+
   (define-key org-mode-map (kbd "C-c C-j") 'consult-org-heading)
+
   (global-set-key (kbd "M-y") 'consult-yank-pop)
 #+end_src
 
