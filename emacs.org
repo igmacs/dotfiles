@@ -346,6 +346,92 @@ new property ~SORTED~
 #+end_src
 
 
+* Emacs as an editor
+** Completion
+*** Minibuffer Display
+**** Vertico
+#+begin_src emacs-lisp
+  ;; Enable Vertico.
+  (use-package vertico
+    :bind (:map vertico-map
+                ;; ivy backward compatibility
+                ("C-m" . exit-minibuffer)
+                ("M-i" . vertico-insert)
+                ("C-M-j" . vertico-exit-input))
+    :init
+    (vertico-mode))
+#+end_src
+*** Completion styles
+**** Orderless
+#+begin_src emacs-lisp
+  (use-package orderless
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles partial-completion))))
+    (completion-category-defaults nil) ;; Disable defaults, use our settings
+    (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
+#+end_src
+*** Sorting
+**** Prescient
+#+begin_src emacs-lisp
+  (use-package vertico-prescient
+    :after ivy
+    :config
+    (vertico-prescient-mode 1)
+    (prescient-persist-mode 1))
+#+end_src
+*** Actions
+**** Embark
+#+begin_src emacs-lisp
+  (use-package embark
+    :ensure t
+    :bind
+    (("M-o" . embark-act)         ;; pick some comfortable binding
+     ("C-;" . embark-dwim)        ;; good alternative: M-.
+     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+    :init
+
+    ;; Optionally replace the key help with a completing-read interface
+    (setq prefix-help-command #'embark-prefix-help-command)
+
+    ;; Show the Embark target at point via Eldoc. You may adjust the
+    ;; Eldoc strategy, if you want to see the documentation from
+    ;; multiple providers. Beware that using this can be a little
+    ;; jarring since the message shown in the minibuffer can be more
+    ;; than one line, causing the modeline to move up and down:
+
+    ;; (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+    ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+
+    ;; Add Embark to the mouse context menu. Also enable `context-menu-mode'.
+    ;; (context-menu-mode 1)
+    ;; (add-hook 'context-menu-functions #'embark-context-menu 100)
+
+    :config
+
+    ;; Hide the mode line of the Embark live/completions buffers
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none)))))
+
+  ;; Consult users will also want the embark-consult package.
+  (use-package embark-consult
+    :ensure t) ; only need to install it, embark loads it after consult if found
+#+end_src
+*** Enhanded commands
+**** Consult
+#+begin_src emacs-lisp
+  (use-package consult)
+
+  (global-set-key (kbd "C-s") 'consult-line)
+
+  (define-key org-mode-map (kbd "C-c C-j") 'consult-org-heading)
+  (global-set-key (kbd "M-y") 'consult-yank-pop)
+#+end_src
+
+
+
 * Emacs as an IDE
 ** Project Managament & Version Control
 ** Version Control
