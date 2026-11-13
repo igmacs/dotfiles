@@ -441,8 +441,21 @@ new property ~SORTED~
 
 * Emacs as an IDE
 ** Project Managament & Version Control
-** Version Control
-*** magit
+*** Project management
+**** projectile
+#+begin_src emacs-lisp
+  (use-package projectile
+    :diminish projectile-mode
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :config
+    (setq projectile-switch-project-action #'magit-status
+          projectile-create-missing-test-files t
+          projectile-use-git-grep t)
+    (projectile-mode +1))
+#+end_src
+*** Version Control
+**** magit
 #+begin_src emacs-lisp
   (use-package magit
     :defer t
@@ -456,12 +469,12 @@ new property ~SORTED~
 
   (add-hook 'ediff-prepare-buffer-hook #'show-all)
 #+end_src
-**** forge
+***** forge
 #+begin_src emacs-lisp
   (use-package forge
     :after magit)
 #+end_src
-*** Browse url for file and line at point in GitHub (and viceversa)
+**** Browse url for file and line at point in GitHub (and viceversa)
 #+begin_src emacs-lisp
   ;; TODO: Use browse-at-remote or git-link instead
   (defun my/forge-browse-url-at-point ()
