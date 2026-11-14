@@ -347,6 +347,47 @@ new property ~SORTED~
 
 
 * Emacs as an editor
+** Moving point
+*** COMMENT avy
+#+begin_src emacs-lisp
+  ;; TODO: Make each commands's default action embark or an hydra or
+  ;; something if called with a universal argument. Or maybe an
+  ;; explicit filter select act hydra, in which we can also choose the
+  ;; initial filter
+
+  (use-package avy
+    :defer t
+    :bind
+    (:prefix-map my/avy-map
+                 :prefix "M-j"
+                 ;; Chars
+                 ("j" . avy-goto-char-timer)
+                 ("M-j" . avy-goto-char-timer)
+                 ("c" . avy-goto-char)
+                 ("M-c" . avy-goto-char-2)
+                 ;; Lines
+                 ("l" . avy-goto-line)
+                 ;; Words
+                 ("w" . avy-goto-word-1)
+                 ;; Org headings
+                 ("h" . avy-org-goto-heading-timer)
+                 ;; Spaces
+                 ("SPC" . avy-goto-whitespace-end))
+    :config
+    (setq
+     ;; Home row avy keys for spanish keyboard layout
+     my/few-avy-keys '(?a ?s ?d ?f ?j ?k ?l ?ñ)
+     my/several-avy-keys
+     '(?a ?c ?d ?e ?f ?g ?h ?i ?j ?k ?l ?m ?n ?ñ ?o ?r ?s ?t ?u ?v ?w ?x)
+     avy-keys my/few-avy-keys
+     avy-background t
+     avy-timeout-seconds 0.2
+     avy-keys-alist
+     `((avy-goto-char . ,my/several-avy-keys)
+       (avy-goto-line . ,my/several-avy-keys)
+       (avy-goto-whitespace-end . ,my/several-avy-keys))
+     ))
+#+end_src
 ** Completion
 *** Minibuffer Display
 **** Vertico
