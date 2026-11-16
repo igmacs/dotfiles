@@ -597,6 +597,22 @@ Allow to define Emacs configuration directly in your notes, for
 personal workflows configuration which doesn't really belong here, or
 configuration that leaks personal information or secrets.
 
+** Load explicitly
+#+begin_src emacs-lisp
+  ;; Loop over headings instead, and use org-babel-execute-subtree
+
+  (defun my/load-org-local-config ()
+    (interactive)
+    (org-map-entries
+     #'org-babel-execute-subtree
+     "+config"))
+
+  (add-hook
+   'org-mode-hook
+   (lambda ()
+     (general-define-key :keymaps 'local "ł ł" #'my/load-org-local-config)))
+#+end_src
+** Load by default
 #+begin_src emacs-lisp
   (require 'org-roam)
   (let ((org-config-files
