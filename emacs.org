@@ -580,6 +580,43 @@ new property ~SORTED~
 #+end_src
 
 
+* Living inside Emacs
+** Or bringing Emacs outside with you
+*** atomic-chrome
+- [[https://github.com/fregante/GhostText][fregante/GhostText: 👻 Use your text editor to write in your browser. Everything you type in the editor will be instantly updated in the browser (and vice versa).]]
+#+begin_src emacs-lisp
+  ;; TODO: Check out https://github.com/KarimAziev/chrome-emacs
+
+  (use-package atomic-chrome
+    :defer 5
+    :config
+    (setq
+     atomic-chrome-buffer-open-style 'frame
+     atomic-chrome-url-major-mode-alist
+        '(("github\\.com" . gfm-mode)))
+    (atomic-chrome-start-server))
+
+  (defun my/atomic-chrome-set-frame-params-advice (orig-fun &rest args)
+    (let ((default-frame-alist
+           (append
+            '( (top . 750)
+               (left . 400))
+            default-frame-alist)))
+      (apply orig-fun args))
+    ;; atomic-chrome-buffer-frame-width/height do not work for me
+    (set-frame-width nil 120)
+    (set-frame-height nil 10)
+    )
+
+  (advice-add 'atomic-chrome-show-edit-buffer :around
+              'my/atomic-chrome-set-frame-params-advice)
+
+  (add-hook 'atomic-chrome-edit-mode-hook 'flyspell-mode)
+  (add-hook 'atomic-chrome-edit-mode-hook 'flyspell-buffer)
+#+end_src
+
+
+
 * Old config
 - For a while I will have two sources of Emacs configuration, this
   one and the one in my private dotfiles repository which I'm
