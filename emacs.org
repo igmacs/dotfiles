@@ -347,6 +347,22 @@ new property ~SORTED~
 
 
 * Emacs as an editor
+** Editing
+*** Long lines
+**** M-q toggles fill/unfill paragraph
+
+#+begin_src emacs-lisp
+  (defun my/unfill-toggle ()
+    "Toggle filling/unfilling of the current paragraph."
+    (interactive)
+    (if (eq last-command 'fill-paragraph)
+        (unfill-paragraph nil)
+      (fill-paragraph nil)
+      (setq this-command 'fill-paragraph)))
+
+  (global-set-key (kbd "M-q") #'my/unfill-toggle)
+#+end_src
+
 ** Moving point
 *** COMMENT avy
 #+begin_src emacs-lisp
