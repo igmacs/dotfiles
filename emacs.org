@@ -678,6 +678,121 @@ configuration that leaks personal information or secrets.
 #+end_src
 
 
+* Alternative config
+** COMMENT English layout keyboard
+*** AltGr alternative
+- Emacs fortunately distinguish between right and left modifier keys,
+  and we can make the right M key not behave as a modifier. Then it
+  behaves something similar to AltGr, but with a different layout we
+  need to remap
+#+begin_src emacs-lisp
+  (setq mac-right-option-modifier 'none)
+
+  (define-key input-decode-map (kbd "¬") (kbd "ł"))
+  (define-key input-decode-map (kbd "©") (kbd "ŋ"))
+#+end_src
+*** Special characters
+- Most special characters are in a different place in the english
+  layout. We remap all of them under a minor mode to be able to switch
+  between writing from muscle memory and actually looking at the key
+  symbols in the keyboard
+#+begin_src emacs-lisp
+  (defvar my-key-translation-mode-map
+    (make-sparse-keymap)
+    "Keymap for `my-key-translation-mode'.")
+
+
+  (defvar my-char-remaps
+    '(
+      ("§" . "\\")
+      ("¡" . "|")
+      ("@" . "\"")
+      ("™" . "@")
+      ("£" . "#")
+      ("¢" . "~")
+      ("^" . "&")
+      ("&" . "/")
+      ("*" . "(")
+      ("(" . ")")
+      (")" . "=")
+      ("-" . "'")
+      ("_" . "?")
+      ("`" . "<")
+      ("~" . ">")
+      (">" . ":")
+      ("<" . "\;")
+      ("/" . "-")
+      ("?" . "_")
+      ("[" . "`")
+      ("{" . "^")
+      ("“" . "[")
+      ("]" . "+")
+      ("}" . "*")
+      ("‘" . "]")
+      (";" . "ñ")
+      (":" . "Ñ")
+      ("' a" . "a")
+      ("' e" . "e")
+      ("' i" . "i")
+      ("' o" . "o")
+      ("' u" . "u")
+      ("æ" . "{")
+      ("\\" . "c")
+      ("|" . "C")
+      ("«" . "}")
+      )
+    "Character remappings.")
+
+  (defvar my-modifiers '("" "C-" "M-" "C-M-"))
+
+  (defun my/get-key-repr (mod key)
+    (let ((chord (concat mod key)))
+      (if (member chord '("C-[" "M-[" "C-M-[")) ;; For some reason these break everything
+          (kbd "C-s-H-z")
+        (kbd chord))))
+
+
+        ;;;###autoload
+  (define-minor-mode my-key-translation-mode
+    "Translate selected keys when enabled."
+    :global t
+    :lighter " KeyTrans"
+    :keymap my-key-translation-mode-map
+    (if my-key-translation-mode
+        (dolist (remap my-char-remaps)
+          (let ((from (car remap))
+                (to   (cdr remap)))
+            (dolist (modifier my-modifiers)
+              (define-key input-decode-map
+                          (my/get-key-repr modifier from)
+                          (my/get-key-repr modifier to)))))
+      (dolist (remap my-char-remaps)
+        (let ((from (car remap))
+              (to   (cdr remap)))
+          (dolist (modifier my-modifiers)
+            (define-key input-decode-map
+                        (kbd (concat modifier from))
+                        nil))))))
+
+
+  (global-set-key (kbd "C-c b s") 'my-key-translation-mode)
+
+
+  ;; Remappings are not transitive usually, but there is a bug or
+  ;; something with transient that makes them so there (two
+  ;; translations are done instead of just one)
+  (add-hook 'transient-setup-buffer-hook
+            (lambda ()
+              (when my-key-translation-mode
+                (define-key input-decode-map (kbd "-") nil))))
+
+  (add-hook 'transient-exit-hook
+            (lambda ()
+              (when my-key-translation-mode
+                (define-key input-decode-map (kbd "-") (kbd "'")))))
+#+end_src
+
+
 * Late init
 #+begin_src emacs-lisp
   (setq gc-cons-threshold (car (get 'gc-cons-threshold 'standard-value)))
