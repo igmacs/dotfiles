@@ -364,7 +364,7 @@ new property ~SORTED~
 #+end_src
 
 ** Moving point
-*** COMMENT avy
+*** avy
 #+begin_src emacs-lisp
   ;; TODO: Make each commands's default action embark or an hydra or
   ;; something if called with a universal argument. Or maybe an
@@ -590,6 +590,11 @@ new property ~SORTED~
 
 * Emacs as an OS
 ** Shells & Terminal Emulators
+*** shell
+#+begin_src emacs-lisp
+  (require 'shell)
+  (define-key shell-mode-map (kbd "M-r") 'consult-history)
+#+end_src
 *** vterm
 #+begin_src emacs-lisp
   (use-package vterm)
