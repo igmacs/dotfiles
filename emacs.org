@@ -568,6 +568,29 @@ new property ~SORTED~
     :config (setq-default flycheck-global-modes '(not org-mode)))
 #+end_src
 ** Programming Languages
+*** Kotlin
+#+begin_src emacs-lisp
+  (use-package kotlin-mode
+    :after eglot
+    :config
+    (add-to-list 'eglot-server-programs '(kotlin-mode . ("kotlin-lsp" "--stdio")))
+    (define-key kotlin-mode-map (kbd "µ j") 'my/open-with-intellij))
+#+end_src
+**** Open file in Intellij
+#+begin_src emacs-lisp
+  (defun my/open-with-intellij ()
+    (interactive)
+    (shell-command
+     (format
+      "intellij --line %s --column %s %s"
+      (line-number-at-pos)
+      (current-column)
+      buffer-file-name )))
+#+end_src
+
+- Open file in Emacs from Intellij:
+  - Create Intellij external tool: emacsclient +$LineNumber$:$ColumnNumber$ $FilePath$ --no-wait
+
 *** Python
 **** Autoimport
 #+begin_src emacs-lisp
