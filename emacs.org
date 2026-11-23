@@ -595,6 +595,13 @@ new property ~SORTED~
   (require 'shell)
   (define-key shell-mode-map (kbd "M-r") 'consult-history)
 #+end_src
+*** eat
+- Not as good as vterm and ghostel I think, but it's pure elisp and
+  doesn't need dynamic modules or any complex setup
+#+begin_src emacs-lisp
+  (use-package eat)
+  (setq eat-term-name "xterm-256color")
+#+end_src
 *** vterm
 #+begin_src emacs-lisp
   (use-package vterm)
