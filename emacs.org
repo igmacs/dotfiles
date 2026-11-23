@@ -826,6 +826,13 @@ configuration that leaks personal information or secrets.
               (when my-key-translation-mode
                 (define-key input-decode-map (kbd "-") (kbd "'")))))
 #+end_src
+** MacOs
+*** Same environment variables as a shell
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :config
+    (exec-path-from-shell-initialize))
+#+end_src
 
 
 * Late init
