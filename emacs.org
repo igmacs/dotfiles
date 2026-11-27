@@ -665,7 +665,47 @@ new property ~SORTED~
   (add-hook 'atomic-chrome-edit-mode-hook 'flyspell-mode)
   (add-hook 'atomic-chrome-edit-mode-hook 'flyspell-buffer)
 #+end_src
+*** emacsclient-dispatcher
+- Function to be called outside of Emacs with emacsclient and a OS
+  keyboard shortcut, which creates a new small and temporal Emacs
+  frame and lets you select a next action. Examples could be
+  - org-capture
+  - Open a web bookmark, and have your bookmarks organized in Emacs
+  - Copy a password to the clipboard, with something like ivy-pass
+#+begin_src emacs-lisp
+  (defvar my/emacsclient-dispatch-actions
+    '((?q "Quit" ignore)))
 
+  (defun my/emacsclient-dispatch ()
+    "Pick one of `my/emacsclient-dispatch-actions', in a tiny frame when Emacs is unfocused."
+    (interactive)
+    (let ((frame
+           (unless (eq (frame-focus-state) t)
+             (make-frame '((name . "Dispatcher")
+                           (top . -10)
+                           (left . 0)
+                           (width . 80)
+                           (height . 10)
+                           (undecorated . t)
+                           (tool-bar-lines . 0)
+                           (menu-bar-lines . 0)
+                           (vertical-scroll-bars . nil))))))
+      (when frame
+        (select-frame-set-input-focus frame)
+        (switch-to-buffer "emacsclient-dispatcher")
+        (setq-local window-min-height 1)
+        (setq-local mode-line-format nil)
+        (setq-local cursor-type nil))
+      (let ((entry (assq (read-key
+                          (mapconcat (lambda (e) (format "%c→%s" (car e) (cadr e)))
+                                     my/emacsclient-dispatch-actions ", "))
+                         my/emacsclient-dispatch-actions)))
+        (when entry
+          (funcall (nth 2 entry))))
+      (when frame
+        (kill-buffer "emacsclient-dispatcher")
+        (delete-frame frame))))
+#+end_src
 
 
 * Old config
