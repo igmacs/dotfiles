@@ -19,5 +19,10 @@
 	date = iso
 [branch]
 	sort = -committerdate
+
+[url "git@github.com:"]
+	insteadOf = https://github.com/
 [includeIf "gitdir:~/repos/work/"]
-        path = "~/.config/git/work/.gitconfig"
+        path = "~/.config/git/work/config"
+[includeIf "gitdir:~/repos/personal/"]
+        path = "~/.config/git/personal/config"

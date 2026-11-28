@@ -1,0 +1,6 @@
+[user]
+	email = ignacio.casso.work@mailbox.org
+[github]
+	user = work-user
+[url "git@work.github.com:"]
+	insteadOf = git@github.com:
